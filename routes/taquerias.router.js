@@ -5,7 +5,7 @@ const service = new TaqueriasService();
 
 router.get('/',async function(req,res,next){
   try {
-    res.json(await service.find(req.query.TaqueriasService));
+    res.json(await service.find());
     } catch (error) {
     next(error);
     }
@@ -15,18 +15,29 @@ router.get('/:id',async function(req,res,next){
   try {
     res.json(await service.findOne(req.params.id));
     } catch (error) {
+      console.log("Error al obtener taqueria",error.message);
     next(error);
     }
 });
 router.post('/',async function(req,res,next){
   try {
+    console.error(req.body);
     res.json(await service.create(req.body));
   } catch (error) {
+    console.error(`Error mientras se creaba el registro`,
+      error.message);
     next(error);
   }
 
 });
-router.put('/:id',async function(req,res,next){});
+router.put('/:id',async function(req,res,next){
+  try {
+    res.json(await service.update
+      (req.params.id,req.body));
+  } catch (error) {
+    next(error);
+  }
+});
 router.delete('/:id',async function(req,res,next){
   try {
     res.json(await service.delete(req.params.id));
